@@ -1,17 +1,14 @@
 //
-//  GameImageView.swift
+//  AlertContainerView.swift
 //  VideoGames
 //
-//  Created by Cumali Han Ünlü on 7.07.2022.
+//  Created by Cumali Han Ünlü on 10.07.2022.
 //
 
 import UIKit
 
-class GameImageView: UIImageView {
-    
-    let placeholderImage = UIImage(named: "placeholder")!
+class AlertContainerView: UIView {
 
-   
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -22,10 +19,10 @@ class GameImageView: UIImageView {
     }
     
     private func configure() {
-        layer.cornerRadius = 10
-        clipsToBounds = true
-        contentMode = .scaleAspectFill
-        image = placeholderImage
+        backgroundColor = .systemBackground
+        layer.cornerRadius = 16
+        layer.borderWidth = 2
+        layer.borderColor = UIColor.white.cgColor
         translatesAutoresizingMaskIntoConstraints = false
         
     }

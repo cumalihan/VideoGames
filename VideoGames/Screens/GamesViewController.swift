@@ -7,20 +7,21 @@
 
 import UIKit
 
+protocol GameInfoVCDelegate: class {
+    func didRequestGame(for game: String)
+}
+
+
 class GamesViewController: UIViewController {
-    
+
     enum Section {
         case main
     }
-    
-    
-    var game: [ResultGame] = []
+
+    var games: [ResultGame] = []
     var filteredGames: [ResultGame] = []
-    
     var isSearching = false
-    
     var collectionView: UICollectionView!
-    
     var dataSource: UICollectionViewDiffableDataSource<Section, ResultGame>!
 
     override func viewDidLoad() {
@@ -34,14 +35,25 @@ class GamesViewController: UIViewController {
         
     }
     
-    func configureCollectionView() {
-        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UIHelper.createThreeColumnFloweLayout(in: view))
-        view.addSubview(collectionView)
-        collectionView.register(GameCell.self, forCellWithReuseIdentifier: GameCell.reuseID)
+    func configureSearchController() {
+        let searchController = UISearchController()
+        searchController.searchResultsUpdater = self
+        searchController.searchBar.delegate = self
+        searchController.searchBar.placeholder = "Search Games"
+        searchController.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController = searchController
     }
     
     func configureViewController() {
         view.backgroundColor = .systemBackground
+    }
+    
+    func configureCollectionView() {
+        collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: UIHelper.createThreeColumnFloweLayout(in: view))
+        collectionView.delegate = self
+        collectionView.register(GameCell.self, forCellWithReuseIdentifier: GameCell.reuseID)
+        view.addSubview(collectionView)
+
     }
     
     func getGames() {
@@ -49,10 +61,9 @@ class GamesViewController: UIViewController {
             guard let self = self else { return }
             
             switch result {
-            case .success(let game):
-                print(game)
-                self.game = game.results
-                self.updateData(on: self.game)
+            case .success(let games):
+                self.games = games.results
+                self.updateData(on: self.games)
                
             case .failure(let error):
                 print(error)
@@ -80,35 +91,47 @@ class GamesViewController: UIViewController {
         DispatchQueue.main.async {
             self.dataSource.apply(snapshot, animatingDifferences: true)
         }
-    
+        
     }
-    
-    func configureSearchController() {
-        let searchController = UISearchController()
-        searchController.searchResultsUpdater = self
-        searchController.searchBar.delegate = self
-        searchController.searchBar.placeholder = "Search Games"
-        searchController.obscuresBackgroundDuringPresentation = false
-        navigationItem.searchController = searchController
-    }
-    
 
 }
 
+extension GamesViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let activeArray = isSearching ? filteredGames : games
+        let game = activeArray[indexPath.item]
+        
+        let destVC = GameInfoViewController()
+        destVC.name = game.name
+        destVC.id = game.id
+        
+        let navController = UINavigationController(rootViewController: destVC)
+        navigationController?.pushViewController(destVC, animated: true)
+    }
+  
+}
+
+
 extension GamesViewController: UISearchResultsUpdating, UISearchBarDelegate {
-    
-    
     func updateSearchResults(for searchController: UISearchController) {
         
         guard let filter = searchController.searchBar.text, !filter.isEmpty else { return }
         isSearching = true
-        filteredGames = game.filter { $0.name.lowercased().contains(filter.lowercased())}
+        filteredGames = games.filter { $0.name.lowercased().contains(filter.lowercased())}
+        
+        if (self.filteredGames.count == 0) {
+            self.collectionView.setEmptyMessage("Sorry, we couldn't find\n \(searchController.searchBar.text ?? "")")
+        } else {
+            self.collectionView.restore()
+        }
         updateData(on: filteredGames)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-       isSearching = false
-       updateData(on: game)
+        isSearching = false
+        self.collectionView.restore()
+        updateData(on: games)
     }
 }
+
 

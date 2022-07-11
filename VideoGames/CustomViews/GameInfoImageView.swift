@@ -1,13 +1,14 @@
 //
-//  GameImageView.swift
+//  GameInfoImageView.swift
 //  VideoGames
 //
-//  Created by Cumali Han Ünlü on 7.07.2022.
+//  Created by Cumali Han Ünlü on 9.07.2022.
 //
 
 import UIKit
 
-class GameImageView: UIImageView {
+
+class GameInfoImageView: UIImageView {
     
     let placeholderImage = UIImage(named: "placeholder")!
 
@@ -22,7 +23,7 @@ class GameImageView: UIImageView {
     }
     
     private func configure() {
-        layer.cornerRadius = 10
+        layer.cornerRadius = 5
         clipsToBounds = true
         contentMode = .scaleAspectFill
         image = placeholderImage

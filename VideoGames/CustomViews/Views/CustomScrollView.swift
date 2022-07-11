@@ -1,17 +1,15 @@
 //
-//  GameImageView.swift
+//  ScrollView.swift
 //  VideoGames
 //
-//  Created by Cumali Han Ünlü on 7.07.2022.
+//  Created by Cumali Han Ünlü on 11.07.2022.
 //
 
 import UIKit
 
-class GameImageView: UIImageView {
-    
-    let placeholderImage = UIImage(named: "placeholder")!
+class CustomScrollView: UIScrollView {
 
-   
+  
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -22,12 +20,10 @@ class GameImageView: UIImageView {
     }
     
     private func configure() {
-        layer.cornerRadius = 10
-        clipsToBounds = true
-        contentMode = .scaleAspectFill
-        image = placeholderImage
+        backgroundColor = .systemBackground
         translatesAutoresizingMaskIntoConstraints = false
         
     }
+
 
 }

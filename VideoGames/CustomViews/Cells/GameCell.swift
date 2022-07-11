@@ -12,8 +12,9 @@ class GameCell: UICollectionViewCell {
     
     let gameImageView = GameImageView(frame: .zero)
     let gameNameLabel = TitleLabel(textAlignment: .left, fontSize: 22)
-    let releasedLabel = ReleasedLabel()
-    let ratingsLabel = RatingsLabel()
+    let releasedLabel = SecondaryLabel()
+    let ratingsLabel = SecondaryLabel()
+    let ratingsImageView = UIImageView()
     
     
     override init(frame: CGRect) {
@@ -27,11 +28,9 @@ class GameCell: UICollectionViewCell {
     
     func set(game: ResultGame) {
         gameNameLabel.text = game.name
-        releasedLabel.text = game.released
-        ratingsLabel.text = String(game.rating)
-       
-        
-        
+        releasedLabel.text = game.released.convertToDisplayFormat()
+        ratingsLabel.text = String("★ \(game.rating)")
+
         NetworkManager.shared.downloadImage(from: game.backgroundImage) { [weak self] image in
             guard let self = self else {return}
             
@@ -47,6 +46,7 @@ class GameCell: UICollectionViewCell {
         addSubview(gameNameLabel)
         addSubview(releasedLabel)
         addSubview(ratingsLabel)
+        addSubview(ratingsImageView)
         
         let padding: CGFloat = 8
         
@@ -71,7 +71,9 @@ class GameCell: UICollectionViewCell {
             ratingsLabel.topAnchor.constraint(equalTo: self.releasedLabel.bottomAnchor, constant: 2),
             ratingsLabel.leadingAnchor.constraint(equalTo: gameImageView.trailingAnchor, constant: 24),
             ratingsLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -padding),
-            ratingsLabel.heightAnchor.constraint(equalToConstant: 20)
+            ratingsLabel.heightAnchor.constraint(equalToConstant: 20),
+            
+         
             
             
         ])

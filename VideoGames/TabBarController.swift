@@ -16,7 +16,6 @@ class TabBarController: UITabBarController {
         
     }
     
-    
     func createSearchNC() -> UINavigationController {
         let searchVC = GamesViewController()
         searchVC.title = "Search"
@@ -26,13 +25,11 @@ class TabBarController: UITabBarController {
     }
     
     func createFavoritesNC() -> UINavigationController{
-        let favoritesNC = FavoritesViewController()
+        let favoritesNC = FavoritesListViewController()
         favoritesNC.title = "Favorites"
         favoritesNC.tabBarItem = UITabBarItem(tabBarSystemItem: .favorites, tag: 1)
         
         return UINavigationController(rootViewController: favoritesNC)
     }
-
-    
 
 }

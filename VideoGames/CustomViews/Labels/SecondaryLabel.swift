@@ -1,14 +1,14 @@
 //
-//  ReleasedLabels.swift
+//  SecondaryLabel.swift
 //  VideoGames
 //
-//  Created by Cumali Han Ünlü on 7.07.2022.
+//  Created by Cumali Han Ünlü on 9.07.2022.
 //
+
 
 import UIKit
 
-class ReleasedLabel: UILabel {
-
+class SecondaryLabel: UILabel {
     override init(frame: CGRect) {
         super.init(frame: frame)
         configure()
@@ -19,18 +19,19 @@ class ReleasedLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
-    convenience init(textAlignment: NSTextAlignment, fontSize: CGFloat) {
+    convenience init(fontSize: CGFloat) {
         self.init(frame: .zero)
-        self.textAlignment = textAlignment
-        self.font = UIFont.systemFont(ofSize: fontSize, weight: .light)
+        font = UIFont.systemFont(ofSize: fontSize, weight: .bold)
     }
     
     private func configure() {
-        textColor = .label
+        textColor = .secondaryLabel
         adjustsFontSizeToFitWidth = true
+
         minimumScaleFactor = 0.90
         lineBreakMode = .byTruncatingTail
         translatesAutoresizingMaskIntoConstraints = false
     }
-    
+
+
 }
